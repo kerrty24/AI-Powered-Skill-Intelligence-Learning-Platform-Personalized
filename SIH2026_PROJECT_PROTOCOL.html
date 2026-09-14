@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIH 2026 Project Implementation Protocol | ALTRIX</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #0ea5e9;
+            --dark: #0f172a;
+            --gray-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-heading: #0f172a;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--gray-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 45px 55px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-left h1 {
+            color: var(--primary);
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .badge-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            background: #eff6ff;
+            color: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .badge.accent {
+            background: #ecfdf5;
+            color: var(--success);
+            border-color: #a7f3d0;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 35px;
+        }
+
+        .meta-table th, .meta-table td {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .meta-table th {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            width: 25%;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 19px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--dark);
+            font-size: 16px;
+            margin: 18px 0 10px;
+        }
+
+        p, ul, ol {
+            margin-bottom: 15px;
+            font-size: 14.5px;
+        }
+
+        ul, ol {
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .protocol-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-light);
+            padding: 18px 22px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pipeline-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .pipeline-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 8px;
+            border-top: 3px solid var(--accent);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .pipeline-card .num {
+            font-weight: 800;
+            color: var(--primary-light);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .pipeline-card .title {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 14px;
+            margin: 4px 0 6px;
+        }
+
+        .pipeline-card .desc {
+            font-size: 12.5px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .tech-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .tech-item b {
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table.data-table th, table.data-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            font-size: 13.5px;
+        }
+
+        table.data-table th {
+            background: #f1f5f9;
+            color: var(--dark);
+            text-align: left;
+        }
+
+        .math-box {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            color: #0f172a;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .sign-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .sign-box {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .sign-line {
+            height: 1px;
+            background: #94a3b8;
+            margin: 45px auto 10px;
+            width: 80%;
+        }
+
+        .print-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30,58,138,0.25);
+            transition: all 0.2s;
+        }
+
+        .print-btn:hover {
+            background: var(--primary-light);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 20px;
+                max-width: 100%;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header-bar">
+        <div class="header-left">
+            <h1>TECHNICAL & IMPLEMENTATION PROTOCOL</h1>
+            <p>Smart India Hackathon 2026 — Official Project Protocol Document</p>
+        </div>
+        <div style="text-align: right;">
+            <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </div>
+    </div>
+
+    <table class="meta-table">
+        <tr>
+            <th>Project Title</th>
+            <td colspan="3"><b>AI-Powered Skill Intelligence Learning Platform & Personalized Learning Paths</b></td>
+        </tr>
+        <tr>
+            <th>Problem Statement ID</th>
+            <td><span class="badge">SIH26101</span></td>
+            <th>Theme & Category</th>
+            <td>Smart Education | Software</td>
+        </tr>
+        <tr>
+            <th>Team Name</th>
+            <td><b>ALTRIX</b></td>
+            <th>Target Domain</th>
+            <td>Mission Karmayogi / Civil Services Capacity Building</td>
+        </tr>
+        <tr>
+            <th>Protocol Version</th>
+            <td>v1.0 (Scrutiny Ready)</td>
+            <th>Compliance Status</th>
+            <td><span class="badge accent">Verified Standard</span></td>
+        </tr>
+    </table>
+
+    <h2>1. Executive Protocol Summary</h2>
+    <div class="protocol-box">
+        <p>This protocol establishes the mandatory technical architecture, standard operating procedures (SOP), automated assessment rubrics, and data communication rules for <b>Team ALTRIX's SIH 2026 Project</b>. It bridges the 6-slide presentation format with concrete engineering specifications required during institutional and jury reviews.</p>
+    </div>
+
+    <h2>2. Standard Operating Procedure (6-Stage Closed-Loop Protocol)</h2>
+    <p>The platform operates through an automated cyclical protocol guaranteeing role-competency alignment:</p>
+
+    <div class="pipeline-flow">
+        <div class="pipeline-card">
+            <div class="num">Stage 01</div>
+            <div class="title">Role Ingestion</div>
+            <div class="desc">Ingests competency requirements per designation using national FRAC frameworks.</div>
+        </div>
+        <div class="pipeline-card">
+            <div class="num">Stage 02</div>
+            <div class="title">Diagnostic Assessment</div>
+            <div class="desc">Administers situational & knowledge screening to establish learner baseline.</div>
+        </div>
+        <div class="pipeline-card">
+            <div class="num">Stage 03</div>
+            <div class="title">Skill-Gap Diagnostic</div>
+            <div class="desc">Calculates differential competency vector: ΔC = Target Level - Baseline Level.</div>
+        </div>
+        <div class="pipeline-card">
+            <div class="num">Stage 04</div>
+            <div class="title">Curriculum Synthesis</div>
+            <div class="desc">RAG engine matches precise iGOT Karmayogi modules to bridge identified deficiencies.</div>
+        </div>
+        <div class="pipeline-card">
+            <div class="num">Stage 05</div>
+            <div class="title">In-Situ Adaptive Testing</div>
+            <div class="desc">Dynamically generates contextual quizzes grounded in verified course materials.</div>
+        </div>
+        <div class="pipeline-card">
+            <div class="num">Stage 06</div>
+            <div class="title">Dynamic Re-Indexing</div>
+            <div class="desc">Updates officer competency scores on verified completion, feeding continuous upskilling.</div>
+        </div>
+    </div>
+
+    <h2>3. System Architecture & Technical Communication Protocol</h2>
+    <div class="tech-grid">
+        <div class="tech-item">
+            <b>Frontend Client Tier:</b>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">React.js 18 with Tailwind CSS. Communicates via secure RESTful JSON (TLS 1.3) and WebSocket connections for live evaluation streams.</p>
+        </div>
+        <div class="tech-item">
+            <b>API Gateway & Service Mesh:</b>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Java Spring Boot 3.x enforcing Role-Based Access Control (RBAC), JWT token lifecycle management, and rate limiting.</p>
+        </div>
+        <div class="tech-item">
+            <b>AI Inference Microservice:</b>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Python 3.11 with FastAPI. Executes LangChain/LlamaIndex RAG pipelines with strict JSON-schema output enforcement.</p>
+        </div>
+        <div class="tech-item">
+            <b>Data Persistence & Vector Store:</b>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">PostgreSQL 16 with <code>pgvector</code> extension for sub-30ms semantic course retrieval using HNSW indexing.</p>
+        </div>
+    </div>
+
+    <h2>4. Evaluation Rubric & Mathematical Scoring Protocol</h2>
+    <p>Learner competency scoring is governed by a deterministic, transparent formula to prevent subjective grading:</p>
+
+    <div class="math-box">
+        Composite Competency Index (CCI) = (0.40 × K<sub>domain</sub>) + (0.35 × R<sub>reasoning</sub>) + (0.25 × A<sub>application</sub>)
+    </div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Proficiency Band</th>
+                <th>Score Range</th>
+                <th>Diagnostic Status</th>
+                <th>Prescribed Action Protocol</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Tier 1: Expert</b></td>
+                <td>85 – 100</td>
+                <td>Deployment Ready</td>
+                <td>Issue official competency certificate; unlock advanced modules.</td>
+            </tr>
+            <tr>
+                <td><b>Tier 2: Proficient</b></td>
+                <td>70 – 84</td>
+                <td>Core Competencies Met</td>
+                <td>Approved for standard designation duties; quarterly refresher.</td>
+            </tr>
+            <tr>
+                <td><b>Tier 3: Developing</b></td>
+                <td>50 – 69</td>
+                <td>Moderate Skill Gap</td>
+                <td>Mandatory 2-week targeted micro-learning remediation.</td>
+            </tr>
+            <tr>
+                <td><b>Tier 4: Critical Gap</b></td>
+                <td>&lt; 50</td>
+                <td>Substantial Deficiency</td>
+                <td>Automated alert dispatched to training supervisor; baseline restart.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Security, Risk & Guardrails Protocol</h2>
+    <ul>
+        <li><b>Zero Hallucination Guardrail:</b> Assessment generation prompts are constrained to exact contextual excerpts retrieved from verified government curriculum files.</li>
+        <li><b>Data Privacy & Sovereignty:</b> Learner performance telemetry and PII are encrypted using AES-256 at rest and TLS 1.3 in transit with on-premise government cloud compliance.</li>
+        <li><b>Fallback Protocol:</b> If vector search latency exceeds 2000ms, the system gracefully falls back to pre-indexed taxonomic keyword caches.</li>
+    </ul>
+
+    <h2>6. Presentation-to-Protocol Cross-Reference Matrix</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>PPT Slide</th>
+                <th>Presentation Focus</th>
+                <th>Technical Protocol Correlate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Slide 1</b></td>
+                <td>Title & Team Identification</td>
+                <td>Document Metadata & Problem Statement Mapping (SIH26101)</td>
+            </tr>
+            <tr>
+                <td><b>Slide 2</b></td>
+                <td>Solution & Innovation</td>
+                <td>Section 2: 6-Stage Closed-Loop Operating Protocol</td>
+            </tr>
+            <tr>
+                <td><b>Slide 3</b></td>
+                <td>Technical Approach</td>
+                <td>Section 3: System Architecture & Data Communication Protocol</td>
+            </tr>
+            <tr>
+                <td><b>Slide 4</b></td>
+                <td>Feasibility & Viability</td>
+                <td>Section 5: Security, Fallback & Operational Guardrails Protocol</td>
+            </tr>
+            <tr>
+                <td><b>Slide 5</b></td>
+                <td>Impact & Benefits</td>
+                <td>Section 4: Competency Indexing & Measurable Outcomes Matrix</td>
+            </tr>
+            <tr>
+                <td><b>Slide 6</b></td>
+                <td>Research & References</td>
+                <td>FRAC Guidelines, Mission Karmayogi, and RAG Architecture Literature</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="sign-grid">
+        <div class="sign-box">
+            <div class="sign-line"></div>
+            <b>Team Lead (ALTRIX)</b><br>
+            <span style="font-size: 12px; color: #64748b;">Candidate Signature</span>
+        </div>
+        <div class="sign-box">
+            <div class="sign-line"></div>
+            <b>Faculty Guide / Mentor</b><br>
+            <span style="font-size: 12px; color: #64748b;">Project Supervisor</span>
+        </div>
+        <div class="sign-box">
+            <div class="sign-line"></div>
+            <b>Institutional Scrutiny Cell</b><br>
+            <span style="font-size: 12px; color: #64748b;">SIH College Coordinator</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

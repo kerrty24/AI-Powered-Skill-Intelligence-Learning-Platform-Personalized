@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skill Intelligence & GD Evaluation Platform | SIH 2026 Demo</title>
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --surface: #131b2e;
+            --surface-hover: #1c2742;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+            --accent: #10b981;
+            --accent-purple: #8b5cf6;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #233152;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1150px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        header {
+            background: linear-gradient(135deg, #0d1527 0%, #1e293b 100%);
+            padding: 22px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .header-tags {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tag {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag.green {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #6ee7b7;
+        }
+
+        /* Step Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: #0d1424;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 14px 22px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-main);
+            background: var(--surface-hover);
+        }
+
+        .nav-tab.active {
+            color: #60a5fa;
+            border-bottom-color: var(--primary);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .nav-tab .step-num {
+            background: rgba(255,255,255,0.08);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .nav-tab.active .step-num {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Content Area */
+        .content-body {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Controls & Form Elements */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 820px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #111a30;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #93c5fd;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            background: #090e1c;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn.btn-accent {
+            background: var(--accent);
+        }
+
+        .btn.btn-accent:hover {
+            background: #059669;
+        }
+
+        .btn.btn-secondary {
+            background: #233152;
+            color: #cbd5e1;
+        }
+
+        .btn.btn-secondary:hover {
+            background: #33446b;
+        }
+
+        /* Live Simulation Visualizer */
+        .live-stage {
+            background: #090e1c;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .live-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .pulsing-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--danger);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 680px) {
+            .participants-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .p-card {
+            background: #111a30;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .p-card.active-speaker {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .p-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #233152;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin: 0 auto 8px;
+        }
+
+        .p-name {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .p-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .p-time {
+            font-size: 11px;
+            color: #93c5fd;
+            margin-top: 4px;
+            font-family: monospace;
+        }
+
+        /* Live Transcript Stream */
+        .transcript-feed {
+            height: 190px;
+            overflow-y: auto;
+            background: #0d1424;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transcript-entry {
+            font-size: 13.5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #131d36;
+            border-left: 3px solid var(--primary);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .transcript-entry b {
+            color: #60a5fa;
+            margin-right: 6px;
+        }
+
+        .transcript-entry.student-b {
+            border-left-color: var(--accent-purple);
+        }
+        .transcript-entry.student-b b { color: #c084fc; }
+
+        .transcript-entry.student-c {
+            border-left-color: var(--warning);
+        }
+        .transcript-entry.student-c b { color: #fcd34d; }
+
+        /* Canvas Chart Container */
+        .chart-box {
+            position: relative;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Skill Gap Matrix Table */
+        .gap-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        .gap-table th, .gap-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .gap-table th {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar-bg {
+            background: #1e293b;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .delta-tag {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .delta-tag.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .delta-tag.med {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .delta-tag.low {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        /* RAG Recommendations */
+        .course-card {
+            background: #0d1424;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-card h4 {
+            font-size: 14.5px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .course-card p {
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .course-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Adaptive Quiz */
+        .quiz-box {
+            background: #0d1424;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-top: 15px;
+        }
+
+        .quiz-q {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #f8fafc;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-opt {
+            background: #131d36;
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-opt:hover {
+            border-color: var(--primary);
+            background: #1c294a;
+        }
+
+        .quiz-opt.correct {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+        }
+
+        .quiz-opt.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        /* Certificate / Final Score */
+        .cert-card {
+            background: linear-gradient(145deg, #10192e 0%, #0b1120 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 14px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent) 0% 84%, #1e293b 84% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .score-inner {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: #0f172a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .score-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <h1><span>⚡</span> AI Skill Intelligence & Evaluation Platform</h1>
+            <p>Smart India Hackathon 2026 • Problem Statement SIH26101 • Team ALTRIX</p>
+        </div>
+        <div class="header-tags">
+            <span class="tag green">● Live Prototype</span>
+            <span class="tag">Standard: FRAC / iGOT</span>
+        </div>
+    </header>
+
+    <!-- Navigation Steps -->
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab(0)">
+            <span class="step-num">1</span> Diagnostic Setup
+        </button>
+        <button class="nav-tab" onclick="switchTab(1)">
+            <span class="step-num">2</span> Live AI Assessment
+        </button>
+        <button class="nav-tab" onclick="switchTab(2)">
+            <span class="step-num">3</span> Skill Gap Matrix
+        </button>
+        <button class="nav-tab" onclick="switchTab(3)">
+            <span class="step-num">4</span> RAG Curriculum
+        </button>
+        <button class="nav-tab" onclick="switchTab(4)">
+            <span class="step-num">5</span> Adaptive Testing
+        </button>
+        <button class="nav-tab" onclick="switchTab(5)">
+            <span class="step-num">6</span> Official Credential
+        </button>
+    </nav>
+
+    <!-- Content Body -->
+    <div class="content-body">
+
+        <!-- TAB 1: Diagnostic Setup -->
+        <div class="tab-panel active" id="tab-0">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">🎯 Official / Learner Role Profile</div>
+                    
+                    <label>Target Role Framework (FRAC Guideline)</label>
+                    <select id="role-select">
+                        <option value="officer">Assistant Administrative Officer (Grade-1)</option>
+                        <option value="data">Public Sector Data & AI Governance Specialist</option>
+                        <option value="project">Urban Infrastructure Project Manager</option>
+                        <option value="student">Graduate Placement & GD Candidate</option>
+                    </select>
+
+                    <label>Candidate Name / Participant ID</label>
+                    <input type="text" id="candidate-name" value="Shobana P (Candidate 01)">
+
+                    <label>Assessment Assessment Focus</label>
+                    <input type="text" id="assessment-topic" value="Artificial Intelligence Governance & Digital Public Infrastructure (DPI)">
+
+                    <button class="btn btn-accent" onclick="startAssessmentFlow()">
+                        ▶ Start Diagnostic Assessment
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📋 Protocol Benchmark Standards</div>
+                    <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                        The diagnostic module benchmarks candidates against predefined national competence vectors:
+                    </p>
+                    <ul style="padding-left: 20px; font-size: 13px; color: #cbd5e1; line-height: 1.8;">
+                        <li><b>Domain Knowledge ($K_{domain}$):</b> Core regulatory and policy understanding.</li>
+                        <li><b>Analytical Reasoning ($R_{reasoning}$):</b> Situational problem resolution.</li>
+                        <li><b>Articulation & Communication ($A_{comm}$):</b> Persuasive structured speech.</li>
+                        <li><b>Collaborative Agility ($C_{team}$):</b> Constructive discourse & listening index.</li>
+                    </ul>
+                    <div style="margin-top: 18px; padding: 12px; background: #090e1c; border-radius: 8px; font-size: 12px; color: #93c5fd;">
+                        💡 <i>Complies with SIH2026 6-Stage Operating Protocol. Ready for Scrutiny Review.</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Live AI Assessment -->
+        <div class="tab-panel" id="tab-1">
+            <div class="live-stage">
+                <div class="live-status-bar">
+                    <div class="status-indicator">
+                        <div class="pulsing-dot" id="live-dot"></div>
+                        <span id="live-status-text">🔴 LIVE EVALUATION ENGINE RUNNING</span>
+                    </div>
+                    <div style="font-size: 13px; font-family: monospace; color: #93c5fd;" id="gd-timer">
+                        Session Time: 01:45
+                    </div>
+                </div>
+
+                <div class="participants-grid">
+                    <div class="p-card active-speaker" id="pcard-0">
+                        <div class="p-avatar">👩‍💼</div>
+                        <div class="p-name" id="pname-0">Candidate A</div>
+                        <div class="p-role">Speaking...</div>
+                        <div class="p-time" id="ptime-0">48s (42%)</div>
+                    </div>
+                    <div class="p-card" id="pcard-1">
+                        <div class="p-avatar">👨‍💼</div>
+                        <div class="p-name">Participant B</div>
+                        <div class="p-role">Listening</div>
+                        <div class="p-time" id="ptime-1">32s (28%)</div>
+                    </div>
+                    <div class="p-card" id="pcard-2">
+                        <div class="p-avatar">👩‍🎓</div>
+                        <div class="p-name">Participant C</div>
+                        <div class="p-role">Listening</div>
+                        <div class="p-time" id="ptime-2">20s (18%)</div>
+                    </div>
+                    <div class="p-card" id="pcard-3">
+                        <div class="p-avatar">👨‍🎓</div>
+                        <div class="p-name">Participant D</div>
+                        <div class="p-role">Listening</div>
+                        <div class="p-time" id="ptime-3">14s (12%)</div>
+                    </div>
+                </div>
+
+                <label>Real-Time NLP Speech & Transcript Stream</label>
+                <div class="transcript-feed" id="transcript-feed">
+                    <div class="transcript-entry">
+                        <b>Candidate A:</b> Digital Public Infrastructure must prioritize citizen data sovereignty while deploying automated services.
+                    </div>
+                    <div class="transcript-entry student-b">
+                        <b>Participant B:</b> True, but without automated edge validation, rural bandwidth bottlenecks will compromise real-time delivery.
+                    </div>
+                    <div class="transcript-entry student-c">
+                        <b>Participant C:</b> We should also consider offline-first synchronization protocols for remote administrative taluks.
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-accent" onclick="addSimulatedSpeech()">
+                    💬 Inject Candidate Speech Turn
+                </button>
+                <button class="btn btn-secondary" onclick="useVoiceMic()" id="mic-btn">
+                    🎙️ Speak with Microphone (Speech-to-Text)
+                </button>
+                <button class="btn" onclick="finishEvaluationAndAnalyze()">
+                    📊 Finalize & Generate Skill-Gap Matrix ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 3: Skill Gap Matrix -->
+        <div class="tab-panel" id="tab-2">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">🕸️ Competency Radar Analysis</div>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px;">
+                        Comparing <span style="color:#3b82f6; font-weight:700;">Required FRAC Target (Blue)</span> vs <span style="color:#10b981; font-weight:700;">Evaluated Candidate Score (Green)</span>:
+                    </p>
+                    <div class="chart-box">
+                        <canvas id="radarCanvas" width="340" height="280"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📉 Differential Skill-Gap Matrix (ΔC)</div>
+                    <table class="gap-table">
+                        <thead>
+                            <tr>
+                                <th>Competency Vector</th>
+                                <th>Measured</th>
+                                <th>Deficit (ΔC)</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Domain & Policy Knowledge</b></td>
+                                <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 82%;"></div></div> 82%</td>
+                                <td>-8%</td>
+                                <td><span class="delta-tag low">Low Gap</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Data & AI Governance</b></td>
+                                <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 54%; background:#ef4444;"></div></div> 54%</td>
+                                <td>-36%</td>
+                                <td><span class="delta-tag high">Critical Gap</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Situational Reasoning</b></td>
+                                <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 88%;"></div></div> 88%</td>
+                                <td>-2%</td>
+                                <td><span class="delta-tag low">Cleared</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Communication & Clarity</b></td>
+                                <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 78%;"></div></div> 78%</td>
+                                <td>-12%</td>
+                                <td><span class="delta-tag med">Moderate</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Team Deliberation Index</b></td>
+                                <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 85%;"></div></div> 85%</td>
+                                <td>-5%</td>
+                                <td><span class="delta-tag low">Cleared</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button class="btn" onclick="switchTab(3)">
+                            Synthesize RAG Learning Journey ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: RAG Personalized Curricula -->
+        <div class="tab-panel" id="tab-3">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-title">📚 Personalized Curriculum Grounded in iGOT Karmayogi</div>
+                <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 15px;">
+                    Our semantic vector search (<code>pgvector</code> + HNSW) automatically retrieved micro-modules addressing the <b>Critical Gap: Data & AI Governance (-36%)</b>:
+                </p>
+
+                <div class="course-card">
+                    <div>
+                        <h4>1. Regulatory Architecture of Digital Personal Data Protection (DPDP) Act</h4>
+                        <p>DoPT / MeitY Official Training Module • Micro-credential course</p>
+                    </div>
+                    <span class="course-badge">Target: Priority 1 (35 Mins)</span>
+                </div>
+
+                <div class="course-card" style="border-left-color: #8b5cf6;">
+                    <div>
+                        <h4>2. Algorithmic Accountability in Public Service Delivery</h4>
+                        <p>National e-Governance Division (NeGD) • Case Study & Sandbox</p>
+                    </div>
+                    <span class="course-badge" style="color: #c084fc; background: rgba(139,92,246,0.15);">Target: Priority 2 (45 Mins)</span>
+                </div>
+
+                <div class="course-card" style="border-left-color: #10b981;">
+                    <div>
+                        <h4>3. Public Communication & Multi-Stakeholder Consensus Building</h4>
+                        <p>Capacity Building Commission (CBC) • Practical Simulation</p>
+                    </div>
+                    <span class="course-badge" style="color: #6ee7b7; background: rgba(16,185,129,0.15);">Refresher: 20 Mins</span>
+                </div>
+
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="btn btn-accent" onclick="switchTab(4)">
+                        Start Adaptive Verification Quiz ➔
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: Adaptive Testing -->
+        <div class="tab-panel" id="tab-4">
+            <div class="card">
+                <div class="card-title">🧠 Computerized Adaptive Testing (CAT) Simulation</div>
+                <p style="font-size: 13px; color: var(--text-muted);">
+                    AI dynamically generates in-situ scenario inquiries. Difficulty scales based on correctness to verify true retention.
+                </p>
+
+                <div class="quiz-box">
+                    <div style="font-size: 11.5px; font-weight: 700; color: #60a5fa; margin-bottom: 6px;">
+                        DIFFICULTY TIER: LEVEL 3 (ADAPTIVE ADVANCED)
+                    </div>
+                    <div class="quiz-q" id="quiz-question">
+                        Scenario: An automated algorithm flags 15% of subsidy beneficiaries as ineligible due to biometric mismatches. Under DPDP and administrative fairness protocols, what is the required first response?
+                    </div>
+
+                    <div class="quiz-options" id="quiz-opts">
+                        <div class="quiz-opt" onclick="answerQuiz(this, false)">
+                            A) Immediately purge the flagged records to prevent fiscal leakage.
+                        </div>
+                        <div class="quiz-opt" onclick="answerQuiz(this, true)">
+                            B) Trigger an exception-handling protocol with human-in-the-loop manual verification before suspending benefits.
+                        </div>
+                        <div class="quiz-opt" onclick="answerQuiz(this, false)">
+                            C) Retrain the neural network on the same dataset without modifying thresholds.
+                        </div>
+                    </div>
+
+                    <div id="quiz-feedback" style="display: none; margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 13.5px;"></div>
+                </div>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <button class="btn" onclick="switchTab(5)">
+                        Generate Final Certified Credential ➔
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: Official Credential -->
+        <div class="tab-panel" id="tab-5">
+            <div class="cert-card">
+                <div class="score-circle">
+                    <div class="score-inner">
+                        <div class="score-num" id="final-score-val">84</div>
+                        <div class="score-label">CCI INDEX</div>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 22px; color: #f8fafc; margin-bottom: 6px;">
+                    COMPETENCY VERIFICATION CERTIFICATE
+                </h2>
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 18px;">
+                    Candidate: <b style="color:#60a5fa;" id="cert-candidate">Shobana P</b> • Assessment Mode: <b>AI Diagnostic & GD Protocol</b>
+                </p>
+
+                <div style="max-width: 600px; margin: 0 auto 20px; background: #080d1a; padding: 15px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; text-align: left;">
+                    <div style="color: #cbd5e1; margin-bottom: 6px;">
+                        <b>Scoring Protocol Formulation:</b>
+                    </div>
+                    <code style="color: #6ee7b7; font-size: 12px;">
+                        CCI = (0.40 × 82 [Domain]) + (0.35 × 88 [Reasoning]) + (0.25 × 80 [Application]) = 83.6 → 84 / 100
+                    </code>
+                    <div style="margin-top: 8px; color: #94a3b8;">
+                        <b>Status:</b> <span style="color:#10b981; font-weight:700;">TIER 2: PROFICIENT (Role Approved)</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button class="btn btn-accent" onclick="window.print()">
+                        🖨️ Print Credential Card
+                    </button>
+                    <button class="btn btn-secondary" onclick="switchTab(0)">
+                        🔄 Run New Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(index) {
+        const tabs = document.querySelectorAll('.nav-tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        
+        tabs.forEach((t, i) => {
+            if (i === index) t.classList.add('active');
+            else t.classList.remove('active');
+        });
+
+        panels.forEach((p, i) => {
+            if (i === index) p.classList.add('active');
+            else p.classList.remove('active');
+        });
+
+        if (index === 2) {
+            drawRadarChart();
+        }
+    }
+
+    function startAssessmentFlow() {
+        const name = document.getElementById('candidate-name').value || 'Shobana P';
+        document.getElementById('pname-0').innerText = name;
+        document.getElementById('cert-candidate').innerText = name;
+        switchTab(1);
+    }
+
+    // Interactive Speech additions
+    const sampleSentences = [
+        "Furthermore, ensuring multi-lingual conversational access allows non-English fluent citizens to interface seamlessly.",
+        "A critical metric is latency; if cloud inference takes more than 3 seconds, user dropout in rural areas escalates drastically.",
+        "We can deploy local quantized SLMs (Small Language Models) directly on edge devices to preserve offline functionality."
+    ];
+    let sentenceIndex = 0;
+
+    function addSimulatedSpeech() {
+        const feed = document.getElementById('transcript-feed');
+        const text = sampleSentences[sentenceIndex % sampleSentences.length];
+        sentenceIndex++;
+
+        const entry = document.createElement('div');
+        entry.className = 'transcript-entry';
+        const candidateName = document.getElementById('candidate-name').value || 'Candidate A';
+        entry.innerHTML = `<b>${candidateName}:</b> ${text}`;
+        feed.appendChild(entry);
+        feed.scrollTop = feed.scrollHeight;
+
+        // Toggle speaker card active highlight
+        document.getElementById('pcard-0').classList.add('active-speaker');
+        setTimeout(() => {
+            document.getElementById('pcard-0').classList.remove('active-speaker');
+        }, 1500);
+    }
+
+    // Web Speech API for real microphone voice input
+    function useVoiceMic() {
+        const btn = document.getElementById('mic-btn');
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Web Speech API is not supported in this browser. You can use the "Inject Candidate Speech Turn" button!');
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-IN';
+        recognition.interimResults = false;
+
+        btn.innerText = '🔴 Listening... Speak now!';
+        btn.style.background = '#ef4444';
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            const feed = document.getElementById('transcript-feed');
+            const entry = document.createElement('div');
+            entry.className = 'transcript-entry';
+            const candidateName = document.getElementById('candidate-name').value || 'Candidate A';
+            entry.innerHTML = `<b>${candidateName} (Live Mic):</b> ${transcript}`;
+            feed.appendChild(entry);
+            feed.scrollTop = feed.scrollHeight;
+            btn.innerText = '🎙️ Speak with Microphone (Speech-to-Text)';
+            btn.style.background = '#233152';
+        };
+
+        recognition.onerror = function() {
+            btn.innerText = '🎙️ Speak with Microphone (Speech-to-Text)';
+            btn.style.background = '#233152';
+        };
+
+        recognition.onend = function() {
+            btn.innerText = '🎙️ Speak with Microphone (Speech-to-Text)';
+            btn.style.background = '#233152';
+        };
+
+        recognition.start();
+    }
+
+    function finishEvaluationAndAnalyze() {
+        switchTab(2);
+    }
+
+    // Radar Chart using pure HTML5 Canvas (100% offline, zero library dependency)
+    function drawRadarChart() {
+        const canvas = document.getElementById('radarCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        const centerX = W / 2;
+        const centerY = H / 2;
+        const radius = 95;
+
+        const labels = ['Domain', 'Governance', 'Reasoning', 'Comm.', 'Teamwork'];
+        const targetScores = [0.90, 0.90, 0.90, 0.90, 0.90];
+        const candidateScores = [0.82, 0.54, 0.88, 0.78, 0.85];
+        const count = labels.length;
+
+        // Draw concentric polygons (Grid)
+        for (let level = 1; level <= 4; level++) {
+            const r = (radius / 4) * level;
+            ctx.beginPath();
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = '#233152';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        // Draw Spokes & Labels
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Segoe UI';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = '#233152';
+            ctx.stroke();
+
+            // Label positioning
+            const lx = centerX + (radius + 22) * Math.cos(angle);
+            const ly = centerY + (radius + 15) * Math.sin(angle);
+            ctx.fillText(labels[i], lx, ly);
+        }
+
+        // Draw Target Polygon (Blue)
+        ctx.beginPath();
+        for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+            const r = radius * targetScores[i];
+            const x = centerX + r * Math.cos(angle);
+            const y = centerY + r * Math.sin(angle);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 2;
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw Candidate Polygon (Green)
+        ctx.beginPath();
+        for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+            const r = radius * candidateScores[i];
+            const x = centerX + r * Math.cos(angle);
+            const y = centerY + r * Math.sin(angle);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 2;
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.25)';
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    // Adaptive Quiz logic
+    function answerQuiz(elem, isCorrect) {
+        const feedback = document.getElementById('quiz-feedback');
+        const opts = document.querySelectorAll('.quiz-opt');
+        opts.forEach(o => o.onclick = null); // disable further clicks
+
+        if (isCorrect) {
+            elem.classList.add('correct');
+            feedback.style.display = 'block';
+            feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+            feedback.style.border = '1px solid #10b981';
+            feedback.style.color = '#6ee7b7';
+            feedback.innerHTML = '<b>✓ Correct Protocol Response!</b> Exception handling ensures procedural fairness and prevents administrative exclusion.';
+            document.getElementById('final-score-val').innerText = '88';
+        } else {
+            elem.classList.add('wrong');
+            feedback.style.display = 'block';
+            feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+            feedback.style.border = '1px solid #ef4444';
+            feedback.style.color = '#fca5a5';
+            feedback.innerHTML = '<b>✗ Incorrect Response.</b> Regulatory compliance requires human-in-the-loop review before revoking entitlements.';
+            document.getElementById('final-score-val').innerText = '82';
+        }
+    }
+
+    window.onload = function() {
+        drawRadarChart();
+    };
+</script>
+
+</body>
+</html>

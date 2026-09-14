@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live GD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🔴 LIVE GROUP DISCUSSION</h1>
+
+    <h3 id="topic"></h3>
+
+    <div>
+        <p>🟢 Student A — Speaking</p>
+        <p>⚪ Student B — Listening</p>
+        <p>⚪ Student C — Listening</p>
+        <p>⚪ Student D — Listening</p>
+    </div>
+
+    <h2>Live Transcript</h2>
+
+    <div id="transcript">
+        <p><b>Student A:</b> AI can create new job opportunities.</p>
+        <p><b>Student B:</b> But AI may replace repetitive jobs.</p>
+    </div>
+
+    <h2>Speaking Time</h2>
+
+    <p>Student A — 42 sec</p>
+    <p>Student B — 35 sec</p>
+    <p>Student C — 24 sec</p>
+    <p>Student D — 30 sec</p>
+
+    <button onclick="endGD()">END DISCUSSION</button>
+
+</div>
+
+<script>
+document.getElementById("topic").innerText =
+    "Topic: " + localStorage.getItem("topic");
+
+function endGD() {
+    window.location.href = "result.html";
+}
+</script>
+
+</body>
+</html>
