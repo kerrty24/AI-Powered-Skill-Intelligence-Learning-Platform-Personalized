@@ -1,0 +1,2 @@
+# AI-Powered-Skill-Intelligence-Learning-Platform-Personalized
+An AI-powered skill intelligence platform that benchmarks competencies against national FRAC frameworks. Features conversational &amp; scenario diagnostics to isolate skill gaps, synthesizes personalized learning paths via RAG-indexed iGOT Karmayogi content, and deploys adaptive testing to continuously track, upskill, and certify public officials.
